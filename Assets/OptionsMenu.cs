@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour
 {
 	int i = 0;
 	public static bool easterEgg = false;
 	public GameObject mainMenu;
+	public Button backButton;
    public void Back()
 	{
 		gameObject.SetActive(false);
@@ -35,6 +37,11 @@ public class OptionsMenu : MonoBehaviour
 		
 		}
 		
+	}
+
+	private void OnEnable()
+	{
+		backButton.Select();
 	}
 
 }
