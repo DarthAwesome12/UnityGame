@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,9 @@ public class OptionsMenu : MonoBehaviour
 	public static bool easterEgg = false;
 	public GameObject mainMenu;
 	public Button backButton;
+	public  GameObject aaQualityObj;
+	private TMP_Dropdown aaQuality;
+	
    public void Back()
 	{
 		gameObject.SetActive(false);
@@ -37,6 +42,38 @@ public class OptionsMenu : MonoBehaviour
 		
 		}
 		
+	}
+
+	public void AAType(int choice) {
+		aaQuality = aaQualityObj.GetComponent<TMP_Dropdown>();
+		PlayerPrefs.SetInt("AAType", choice);
+		Debug.Log(choice);
+		if (choice == 0)
+		{
+			aaQuality.ClearOptions();
+			aaQuality.options.Add(new TMP_Dropdown.OptionData("None"));
+			aaQuality.value = 0;
+			Debug.Log("Set to None");
+		}
+		else
+		{
+
+			aaQuality.ClearOptions();
+
+			List<string> optionList = new List<string>() {"Low", "Medium", "High" };
+			aaQuality.AddOptions(optionList);
+		}
+		aaQuality.RefreshShownValue();
+
+	}
+
+	public void AAQuality(int choice) {
+		if (choice != 0) {
+			PlayerPrefs.SetInt("AAQuality", choice);
+		
+		
+		}
+	
 	}
 
 	private void OnEnable()
