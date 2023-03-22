@@ -34,6 +34,8 @@ public class ProjectileBehavior : MonoBehaviour
 
 			}
 		}
+
+		else if (col.gameObject != transform.parent.gameObject) Destroy(gameObject);
 	}
 	private void OnBecameInvisible()
 	{
