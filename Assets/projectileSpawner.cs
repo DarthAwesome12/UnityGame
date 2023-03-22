@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using UnityEngine.UIElements;
 
 public class projectileSpawner : MonoBehaviour
 {
 
-    public float speed = 4.5f;
+    public float speed = 20.0f;
 	public GameObject projectile;
     public GameObject buttons;
 	public AudioSource audioSource;
+    public GameObject directionCheck;
 	// Start is called before the first frame update
 	void Start()
     {
@@ -34,15 +36,16 @@ public class projectileSpawner : MonoBehaviour
     {      
 
         
-        GameObject instance = Instantiate(projectile, new Vector2(transform.position.x, transform.position.y + transform.localScale.y / 2), Quaternion.identity, gameObject.transform);
+        GameObject instance = Instantiate(projectile, new Vector2(directionCheck.transform.position.x, directionCheck.transform.position.y), Quaternion.identity, gameObject.transform);
         Rigidbody2D instanceRb = instance.AddComponent<Rigidbody2D>();
         instance.AddComponent<ProjectileBehavior>();
         instance.GetComponent<ProjectileBehavior>().buttons = buttons;
 		instance.GetComponent<ProjectileBehavior>().audioSource = audioSource;
 		instanceRb.gravityScale = 0f;
         instanceRb.mass = 0.1f;
-		instanceRb.velocity = new Vector2(0.0f, 20.0f);
-        
+        Vector2 direction = (directionCheck.transform.position - transform.position).normalized;
+		instanceRb.velocity = direction * speed;
+        Debug.Log("DirectionCheck: " + directionCheck.transform.position + "\n spawner:" + transform.position);
         instance.AddComponent<BoxCollider2D>();
 
 
