@@ -30,7 +30,7 @@ public class OptionsMenu : MonoBehaviour
 		Screen.fullScreen = !Screen.fullScreen;
 	}
 
-	public void VolumeButton()
+	public void VolumeButton() //George's unfunny easteregg
 	{
 		i++;
 		if (i == 15)
@@ -50,10 +50,10 @@ public class OptionsMenu : MonoBehaviour
 	}
 
 	public void AAType(int choice) {
-		aaQuality = aaQualityObj.GetComponent<TMP_Dropdown>();
+		aaQuality = aaQualityObj.GetComponent<TMP_Dropdown>(); 
 		PlayerPrefs.SetInt("AAType", choice);
 		
-		if (choice == 0)
+		if (choice == 0) //if AA is off, there should be no AA-Quality options
 		{
 			aaQuality.ClearOptions();
 			aaQuality.options.Add(new TMP_Dropdown.OptionData("None"));
@@ -62,23 +62,24 @@ public class OptionsMenu : MonoBehaviour
 			aaQuality.onValueChanged.AddListener(AAQuality);
 
 		}
-		else
+		else if (aaQuality.options.Count == 4 || aaQuality.options.Count == 1)
 		{
 
-			aaQuality.ClearOptions();
+			aaQuality.ClearOptions(); //removes all options
 
-			List<string> optionList = new List<string>() {"Low", "Medium", "High" };
-			aaQuality.AddOptions(optionList);
+			List<string> optionList = new List<string>() {"Low", "Medium", "High" }; //array of all options
+			aaQuality.AddOptions(optionList); //sets options to array values
+			PlayerPrefs.SetInt("AAQuality", aaQuality.value);
 		}
 		aaQuality.RefreshShownValue();
 
 	}
 
 	public void AAQuality(int choice) {
-		Debug.Log(choice);
-		if (choice != 0) {
+		aaQuality = aaQualityObj.GetComponent<TMP_Dropdown>(); //gets dropdown object
+		if (aaQuality.options.Count == 3) {
 			PlayerPrefs.SetInt("AAQuality", choice);
-			Debug.Log("Applied Choice:" + choice);
+			
 		
 		}
 	
@@ -97,8 +98,42 @@ public class OptionsMenu : MonoBehaviour
 		aaQuality.onValueChanged.RemoveAllListeners();
 		aaType.onValueChanged.RemoveAllListeners();
 
+
 		aaQuality.value = PlayerPrefs.GetInt("AAQuality", 0);
+
+
 		aaType.value = PlayerPrefs.GetInt("AAType", 0);
+
+		Debug.Log(aaType.value);
+
+		if (aaType.value > 0)
+		{
+			aaQuality.ClearOptions(); //removes all options
+
+			List<string> optionList = new List<string>() { "Low", "Medium", "High" }; //array of all options
+			aaQuality.AddOptions(optionList); //sets options to array values
+		}
+
+		else {
+
+			aaQuality.ClearOptions();
+			aaQuality.options.Add(new TMP_Dropdown.OptionData("None"));
+			aaQuality.onValueChanged.RemoveAllListeners();
+			aaQuality.value = 0;
+			aaQuality.onValueChanged.AddListener(AAQuality);
+
+
+
+
+		}
+
+
+		aaQuality.value = PlayerPrefs.GetInt("AAQuality", 0);
+
+
+		aaType.value = PlayerPrefs.GetInt("AAType", 0);
+
+
 
 		aaQuality.onValueChanged.AddListener(AAQuality);
 		aaType.onValueChanged.AddListener(AAType);
@@ -107,8 +142,7 @@ public class OptionsMenu : MonoBehaviour
 
 		aaQuality.RefreshShownValue();
 		aaType.RefreshShownValue();
-		Debug.Log("It should have worked, Qual:" + PlayerPrefs.GetInt("AAQuality", 0));
-		Debug.Log("It should have worked, Qual:" + aaQuality.value);
+		
 	}
 
 }
