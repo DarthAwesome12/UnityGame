@@ -45,7 +45,6 @@ public class projectileSpawner : MonoBehaviour
         instanceRb.mass = 0.1f;
         Vector2 direction = (directionCheck.transform.position - transform.position).normalized;
 		instanceRb.velocity = direction * speed;
-        Debug.Log("DirectionCheck: " + directionCheck.transform.position + "\n spawner:" + transform.position);
         instance.AddComponent<BoxCollider2D>();
 
 

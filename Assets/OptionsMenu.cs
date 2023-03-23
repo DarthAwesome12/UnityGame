@@ -12,13 +12,18 @@ public class OptionsMenu : MonoBehaviour
 	public GameObject mainMenu;
 	public Button backButton;
 	public  GameObject aaQualityObj;
+	public GameObject aaTypeObj;
 	private TMP_Dropdown aaQuality;
+	private TMP_Dropdown aaType;
 	
+ 
    public void Back()
 	{
 		gameObject.SetActive(false);
 		mainMenu.SetActive(true);
 	}
+
+	
 
 	public void ToggleFullscreen()
 	{
@@ -47,13 +52,15 @@ public class OptionsMenu : MonoBehaviour
 	public void AAType(int choice) {
 		aaQuality = aaQualityObj.GetComponent<TMP_Dropdown>();
 		PlayerPrefs.SetInt("AAType", choice);
-		Debug.Log(choice);
+		
 		if (choice == 0)
 		{
 			aaQuality.ClearOptions();
 			aaQuality.options.Add(new TMP_Dropdown.OptionData("None"));
+			aaQuality.onValueChanged.RemoveAllListeners();
 			aaQuality.value = 0;
-			Debug.Log("Set to None");
+			aaQuality.onValueChanged.AddListener(AAQuality);
+
 		}
 		else
 		{
@@ -68,9 +75,10 @@ public class OptionsMenu : MonoBehaviour
 	}
 
 	public void AAQuality(int choice) {
+		Debug.Log(choice);
 		if (choice != 0) {
 			PlayerPrefs.SetInt("AAQuality", choice);
-		
+			Debug.Log("Applied Choice:" + choice);
 		
 		}
 	
@@ -79,6 +87,28 @@ public class OptionsMenu : MonoBehaviour
 	private void OnEnable()
 	{
 		backButton.Select();
+	}
+
+	private void Awake()
+	{
+		aaQuality = aaQualityObj.GetComponent<TMP_Dropdown>();
+		aaType = aaTypeObj.GetComponent<TMP_Dropdown>();
+
+		aaQuality.onValueChanged.RemoveAllListeners();
+		aaType.onValueChanged.RemoveAllListeners();
+
+		aaQuality.value = PlayerPrefs.GetInt("AAQuality", 0);
+		aaType.value = PlayerPrefs.GetInt("AAType", 0);
+
+		aaQuality.onValueChanged.AddListener(AAQuality);
+		aaType.onValueChanged.AddListener(AAType);
+
+
+
+		aaQuality.RefreshShownValue();
+		aaType.RefreshShownValue();
+		Debug.Log("It should have worked, Qual:" + PlayerPrefs.GetInt("AAQuality", 0));
+		Debug.Log("It should have worked, Qual:" + aaQuality.value);
 	}
 
 }
